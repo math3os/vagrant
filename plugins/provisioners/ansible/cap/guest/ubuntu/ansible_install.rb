@@ -19,7 +19,11 @@ module VagrantPlugins
 
             def self.ansible_apt_install(machine)
               machine.communicate.sudo "apt-get update -y -qq"
-              machine.communicate.sudo "apt-get install -y -qq software-properties-common python-software-properties"
+              begin
+                machine.communicate.sudo "apt-get install -y -qq software-properties-common python-software-properties"
+              rescue
+                machine.communicate.sudo "apt-get install -y -qq software-properties-common python3-software-properties"
+              end
               machine.communicate.sudo "add-apt-repository ppa:ansible/ansible -y"
               machine.communicate.sudo "apt-get update -y -qq"
               machine.communicate.sudo "apt-get install -y -qq ansible"
